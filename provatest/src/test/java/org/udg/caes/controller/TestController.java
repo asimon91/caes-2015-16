@@ -3,9 +3,7 @@ package org.udg.caes.controller;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 /**
  * Created by imartin on 30/09/16.
@@ -43,9 +41,31 @@ public class TestController {
   }
 
   @Test
+  public void testMultipleProcessReturnNotTheSameResponse() throws Exception{
+    Response res1 = controller.getHandler(r).process(r);
+    SampleRequest r2 = new SampleRequest("test2");
+    SampleHandler h2 = new SampleHandler();
+    controller.addHandler(r2, h2);
+    Response res2 = controller.getHandler(r2).process(r2);
+    assertNotSame(res1, res2);
+  }
+
+  @Test
   public void testGetTypeOfRequest() throws Exception{
-    Request aitor = new SampleRequest("aitorxd");
-    assertEquals("aitorxd", aitor.getType());
+    Request req = new SampleRequest("foo");
+    assertEquals("foo", req.getType());
+  }
+
+  @Test(expected = Exception.class)
+  public void testAddHandlerToExistingRequest() throws Exception{
+    SampleHandler h2 = new SampleHandler();
+    controller.addHandler(r, h2);
+  }
+
+  @Test(expected = Exception.class)
+  public void testGetNonExistingHandler() throws Exception{
+    SampleRequest foo = new SampleRequest("dummy");
+    Handler bar = controller.getHandler(foo);
   }
 
   private class SampleHandler implements Handler {
