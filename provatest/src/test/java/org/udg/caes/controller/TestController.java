@@ -3,6 +3,7 @@ package org.udg.caes.controller;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
@@ -24,15 +25,31 @@ public class TestController {
   }
 
   @Test
-  public void testGetOk() throws Exception {
+  public void testGetHandlerIsNotNull() throws Exception{
     Handler h2 = controller.getHandler(r);
-    assertNotNull("not null", h2);
-    assertSame("Same object", h, h2);
+    assertNotNull("Get handler doesn't return null handler", h2);
   }
 
+  @Test
+  public void testGetHandlerReturnsSameObject() throws Exception{
+    Handler h2 = controller.getHandler(r);
+    assertSame(h, h2);
+  }
+
+  @Test
+  public void testProcessRequest() throws Exception{
+    Response res = controller.getHandler(r).process(r);
+    assertNotNull("Response is not null", res);
+  }
+
+  @Test
+  public void testGetTypeOfRequest() throws Exception{
+    Request aitor = new SampleRequest("aitorxd");
+    assertEquals("aitorxd", aitor.getType());
+  }
 
   private class SampleHandler implements Handler {
-
+    // Is this a mock class? :-)
     public Response process(Request r) {
       return new SampleResponse();
     }
