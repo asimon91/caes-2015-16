@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DefaultController.java</title>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+  <link rel='stylesheet' type='text/css' href='../../../../coverage.css'/>
+  <link rel='shortcut icon' type='image/png' href='../../../../logo.png'/>
+  <script type='text/javascript' src='../../../../coverage.js'></script>
+  <script type='text/javascript' src='../../../../prettify.js'></script>
+</head>
+<body onload='prettyPrint()'>
+  <table cellpadding='0' cellspacing='1'>
+    <caption>exercici2/src/main/java/org/udg/caes/controller/DefaultController.java</caption>
+    <tr>
+      <td class='line'>1</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>package org.udg.caes.controller;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td><pre class='imports prettyprint' onclick='showHideLines(this)'><div>import org.udg.caes.controller.exceptions.HandlerAlreadyExistException;
+import org.udg.caes.controller.exceptions.HandlerNotFoundException;
+import org.udg.caes.controller.exceptions.ProcessErrorException;
+
+import java.util.HashMap;
+import java.util.Map;
+</div><span>import ...</span></pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td class='comment' onclick='showHideLines(this)'><div>/**
+ * Created by imartin on 30/09/16.
+ */</div><span>/*...*/</span></td>
+    </tr>
+    <tr>
+      <td class='line'>13</td><td class='count'>7</td>
+      <td><pre class='prettyprint covered' id='l13s0'>public class DefaultController implements Controller {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>14</td><td class='count'>7</td>
+      <td><pre class='prettyprint covered' id='l14s0'>  Map&lt;String, Handler> <span class='instance covered' title='Reads: 28 Writes: 7'>handlers</span> = new HashMap&lt;String, Handler>();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>16</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public Response process(Request r) throws HandlerNotFoundException, ProcessErrorException{</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>17</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>18</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l18s0'>      return getHandler(r).process(r);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>19</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l19s0'>    } catch (HandlerNotFoundException e) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>20</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l20s0'>      return new ErrorResponse("No handler found for request");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>21</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l21s0'>    } catch (ProcessErrorException e) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>22</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l22s0'>      return new ErrorResponse("Error processing request");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>23</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>24</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>26</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public Handler getHandler(Request r) throws HandlerNotFoundException {</pre></td>
+    </tr>
+    <tr>
+      <td></td><td class='count'>6</td>
+      <td class='paths'>
+        <span style='cursor:default; background-color:#00ff00' onclick='hidePath()'>Path coverage: 2/2</span>
+        <span class='covered' onclick="showPath(this,'l27s0 l28s0')">A: 1</span>
+        <span class='covered' onclick="showPath(this,'l27s0 l30s0')">B: 5</span>
+      </td>
+    </tr>
+    <tr>
+      <td class='line'>27</td><td class='count'>6</td>
+      <td><pre class='prettyprint jmp'>    <span id='l27s0' title='Executions: 6' class='covered'>if (!handlers.containsKey(r.getType()))</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>28</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l28s0'>      throw new HandlerNotFoundException();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>29</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>30</td><td class='count'>5</td>
+      <td><pre class='prettyprint covered' id='l30s0'>    return handlers.get(r.getType());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>31</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>33</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void addHandler(Request r, Handler h) throws HandlerAlreadyExistException {</pre></td>
+    </tr>
+    <tr>
+      <td></td><td class='count'>9</td>
+      <td class='paths'>
+        <span style='cursor:default; background-color:#00ff00' onclick='hidePath()'>Path coverage: 2/2</span>
+        <span class='covered' onclick="showPath(this,'l34s0 l35s0')">A: 1</span>
+        <span class='covered' onclick="showPath(this,'l34s0 l37s0 l38s0')">B: 8</span>
+      </td>
+    </tr>
+    <tr>
+      <td class='line'>34</td><td class='count'>9</td>
+      <td><pre class='prettyprint jmp'>    <span id='l34s0' title='Executions: 9' class='covered'>if (handlers.containsKey(r.getType()))</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>35</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l35s0'>      throw new HandlerAlreadyExistException();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>36</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>37</td><td class='count'>8</td>
+      <td><pre class='prettyprint covered' id='l37s0'>    handlers.put(r.getType(), h);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>38</td><td class='count'>8</td>
+      <td><pre class='prettyprint covered' id='l38s0'>  }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>39</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>}</pre></td>
+    </tr>
+  </table>
+</body>
+</html>
