@@ -1,7 +1,11 @@
 package org.udg.caes.controller;
 
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.Tested;
 import org.junit.Before;
 import org.junit.Test;
+import org.udg.caes.controller.exceptions.ProcessErrorException;
 
 import static org.junit.Assert.*;
 
@@ -9,83 +13,94 @@ import static org.junit.Assert.*;
  * Created by deidas on 18/10/16.
  */
 public class TestDefaultController {
-    private Controller controller;
-    private MockedHandler h;
-    private MockedRequest r;
-
-//    @Before
-//    public void setup() throws Exception {
-//        controller = new DefaultController();
-//        h = new MockedHandler();
-//        r = new MockedRequest("test");
-//        controller.addHandler(r, h);
-//    }
+    @Tested
+    DefaultController cont;
+    Handler h1 = new Handler(){
+        public Response process(Request r) throws ProcessErrorException {
+            return null;
+        }
+    };
+    Response r1 = new Response() {
+        public String getContent() {
+            return null;
+        }
+    };
 
     @Test
-    public void testGetHandlerIsNotNull() throws Exception{
-        Handler h2 = controller.getHandler(r);
+    public void testGetHandlerIsNotNull(@Mocked final Request req) throws Exception{
+        new Expectations(){{
+            req.getType(); returns("MockedRequest1", "MockedRequest1", "MockedRequest1");
+        }};
+        cont.addHandler(req, h1);
+        Handler h2 = cont.getHandler(req);
         assertNotNull("Get handler doesn't return null handler", h2);
     }
 
-//    @Test
-//    public void testGetHandlerReturnsSameObject() throws Exception{
-//        Handler h2 = controller.getHandler(r);
-//        assertSame(h, h2);
-//    }
-//
-//    @Test
-//    public void testProcessRequest() throws Exception{
-//        Response res = controller.getHandler(r).process(r);
-//        assertNotNull("Response is not null", res);
-//    }
-//
-//    @Test
-//    public void testMultipleProcessReturnNotTheSameResponse() throws Exception{
-//        Response res1 = controller.getHandler(r).process(r);
-//        MockedRequest r2 = new MockedRequest("test2");
-//        MockedHandler h2 = new MockedHandler();
-//        controller.addHandler(r2, h2);
-//        Response res2 = controller.getHandler(r2).process(r2);
-//        assertNotSame(res1, res2);
-//    }
-//
-//    @Test
-//    public void testGetTypeOfRequest() throws Exception{
-//        Request req = new MockedRequest("foo");
-//        assertEquals("foo", req.getType());
-//    }
-//
-//    @Test(expected = Exception.class)
-//    public void testAddHandlerToExistingRequest() throws Exception{
-//        MockedHandler h2 = new MockedHandler();
-//        controller.addHandler(r, h2);
-//    }
-//
-//    @Test(expected = Exception.class)
-//    public void testGetNonExistingHandler() throws Exception{
-//        MockedRequest foo = new MockedRequest("dummy");
-//        Handler bar = controller.getHandler(foo);
-//    }
-
-    private class MockedHandler implements Handler {
-        public Response process(Request r) {
-            return new MockedResponse();
-        }
+    @Test
+    public void testGetHandlerReturnsSameObject(@Mocked final Request req) throws Exception{
+        new Expectations(){{
+           req.getType(); returns("MockedRequest1", "MockedRequest1", "MockedRequest1");
+        }};
+        cont.addHandler(req, h1);
+        Handler h2 = cont.getHandler(req);
+        assertSame(h1, h2);
     }
 
-    private class MockedRequest implements Request {
-        String type;
-
-        MockedRequest(String t) { type = t; }
-
-        public String getType() {
-            return type;
-        }
+    @Test
+    public void testProcessRequest(@Mocked final Request req, @Mocked final Handler han) throws Exception{
+        new Expectations(){{
+            req.getType(); result = "MockedRequest1";
+            han.process(req); result = r1;
+        }};
+        cont.addHandler(req, han);
+        Response res = cont.getHandler(req).process(req);
+        assertNotNull("Response is not null", res);
     }
 
-    private class MockedResponse implements Response {
-        public String getContent(){
-            return "Aquests son els continguts de la resposta!!! :-)";
-        }
+    @Test
+    public void testMultipleProcessReturnNotTheSameResponse(
+            @Mocked final Request req1, @Mocked final Handler han1,
+            @Mocked final Request req2, @Mocked final Handler han2) throws Exception{
+        final Response r2 = new Response(){
+            public String getContent() {
+                return null;
+            }
+        };
+        new Expectations(){{
+            req1.getType(); result = "MockedRequest1";
+            req2.getType(); result = "MockedRequest2";
+            han1.process(req1); result = r1;
+            han2.process(req2); result = r2;
+        }};
+
+        cont.addHandler(req1, han1);
+        cont.addHandler(req2, han2);
+
+        Response res1 = cont.getHandler(req1).process(req1);
+        Response res2 = cont.getHandler(req2).process(req2);
+
+        assertNotSame(res1, res2);
+    }
+
+    @Test(expected = Exception.class)
+    public void testAddHandlerToExistingRequest(@Mocked final Request req) throws Exception{
+        new Expectations(){{
+            req.getType(); result = "MockedRequest";
+        }};
+        Handler h2 = new Handler(){
+            public Response process(Request r) throws ProcessErrorException {
+                return null;
+            }
+        };
+        cont.addHandler(req, h1);
+        cont.addHandler(req, h2);
+    }
+
+    @Test(expected = Exception.class)
+    public void testGetNonExistingHandler(@Mocked final Request req) throws Exception{
+        new Expectations(){{
+           req.getType(); result = "dummy";
+        }};
+        Handler bar = cont.getHandler(req);
     }
 }
