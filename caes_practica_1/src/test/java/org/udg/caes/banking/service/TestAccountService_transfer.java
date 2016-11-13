@@ -6,7 +6,10 @@ import mockit.Mocked;
 import mockit.Tested;
 import org.junit.Test;
 import org.udg.caes.banking.entity.Account;
+import org.udg.caes.banking.exceptions.AccountNotFound;
+import org.udg.caes.banking.exceptions.EntityNotFound;
 import org.udg.caes.banking.exceptions.NotEnoughBalance;
+import org.udg.caes.banking.exceptions.PersistenceException;
 import org.udg.caes.banking.manager.EntityManager;
 
 import static org.junit.Assert.*;
@@ -39,5 +42,23 @@ public class TestAccountService_transfer {
             em.get("to", Account.class); result = to;
         }};
         acs.transfer(from.getId(), to.getId(), 6000);
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void TransferNotPersistent(@Injectable final EntityManager em) throws Exception{
+        new Expectations(){{
+            em.get("from", Account.class); result = from;
+            em.get("to", Account.class); result = to;
+            em.persist(from); result = new PersistenceException();
+        }};
+        acs.transfer(from.getId(), to.getId(), 50);
+    }
+
+    @Test(expected = AccountNotFound.class)
+    public void TransferInexistentAccount(@Injectable final EntityManager em) throws Exception{
+        new Expectations(){{
+            em.get("from", Account.class); result = new EntityNotFound();
+        }};
+        acs.transfer(from.getId(), to.getId(), 150);
     }
 }
