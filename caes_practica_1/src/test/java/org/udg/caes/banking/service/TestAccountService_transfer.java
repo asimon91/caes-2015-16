@@ -20,6 +20,8 @@ import static org.junit.Assert.*;
 public class TestAccountService_transfer {
     @Tested
     AccountService acs;
+    // I need to initialize Account objects, so
+    // I instantiate them
     Account from = new Account("from", 5000);
     Account to = new Account("to", 0);
 
