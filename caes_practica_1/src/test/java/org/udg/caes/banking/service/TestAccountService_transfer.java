@@ -59,8 +59,8 @@ public class TestAccountService_transfer {
     @Test(expected = AccountNotFound.class)
     public void TransferInexistentAccount(@Injectable final EntityManager em) throws Exception{
         new Expectations(){{
-            em.get("from", Account.class); result = new EntityNotFound();
+            em.get("foo", Account.class); result = new EntityNotFound();
         }};
-        acs.transfer(from.getId(), to.getId(), 150);
+        acs.transfer("foo", to.getId(), 150);
     }
 }
