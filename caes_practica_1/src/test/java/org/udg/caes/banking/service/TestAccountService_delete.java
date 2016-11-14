@@ -46,6 +46,18 @@ public class TestAccountService_delete {
         acs.delete(mockAcc);
     }
 
+    @Test(expected = AccountActive.class)
+    public void DeleteAccountCreditCardIsActive(@Injectable final EntityManager em, @Mocked final Account mockAcc, @Mocked final CreditCard MasterCard) throws Exception {
+        final List<CreditCard> cards = new ArrayList<CreditCard>();
+        cards.add(MasterCard);
+        new Expectations(){{
+            mockAcc.getBalance(); result = 0;
+            MasterCard.getCredit(); result = 1000;
+            em.getCreditCards(mockAcc); result  = cards;
+        }};
+        acs.delete(mockAcc);
+    }
+
     @Test(expected = PersistenceException.class)
     public void DeletePersistenceError(@Injectable final EntityManager em, @Injectable final CreditCardService ccs, @Mocked final CreditCard MasterCard) throws Exception{
         final List<CreditCard> cards = new ArrayList<CreditCard>();
