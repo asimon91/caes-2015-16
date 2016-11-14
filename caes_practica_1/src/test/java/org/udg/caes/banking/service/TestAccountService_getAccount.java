@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 /**
  * Created by deidas on 28/10/16.
  */
-public class TestAccountService_GetAccount {
+public class TestAccountService_getAccount {
     @Tested
     AccountService acs;
 
