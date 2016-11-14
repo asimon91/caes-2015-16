@@ -80,10 +80,10 @@ public class TestAccountService_delete {
         final List<CreditCard> cards = new ArrayList<CreditCard>();
         cards.add(MasterCard);
         new Expectations(){{
-            MasterCard.getCredit(); result = 0;
-            em.getCreditCards(acc); result  = cards;
             em.get("from", Account.class); result = acc;
-            ccs.delete(MasterCard);
+        }};
+        new Expectations(AccountService.class){{
+            acs.delete(acc);
         }};
         acs.delete(acc.getId());
         assertTrue(true);
