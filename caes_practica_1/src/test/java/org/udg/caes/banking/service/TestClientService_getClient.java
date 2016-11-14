@@ -6,6 +6,8 @@ import mockit.Mocked;
 import mockit.Tested;
 import org.junit.Test;
 import org.udg.caes.banking.entity.Client;
+import org.udg.caes.banking.exceptions.ClientNotFound;
+import org.udg.caes.banking.exceptions.EntityNotFound;
 import org.udg.caes.banking.manager.EntityManager;
 
 import static org.junit.Assert.*;
@@ -24,5 +26,13 @@ public class TestClientService_getClient {
         }};
         Client res = cs.getClient("foo");
         assertSame(cli, res);
+    }
+
+    @Test(expected = ClientNotFound.class)
+    public void GetClientNotFoundError(@Injectable final EntityManager em) throws Exception{
+        new Expectations(){{
+            em.get("foo", Client.class); result = new EntityNotFound();
+        }};
+        cs.getClient("foo");
     }
 }
