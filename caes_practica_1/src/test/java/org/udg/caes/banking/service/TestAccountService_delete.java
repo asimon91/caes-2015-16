@@ -1,9 +1,6 @@
 package org.udg.caes.banking.service;
 
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Mocked;
-import mockit.Tested;
+import mockit.*;
 import org.junit.Test;
 import org.udg.caes.banking.entity.Account;
 import org.udg.caes.banking.entity.CreditCard;
@@ -35,7 +32,10 @@ public class TestAccountService_delete {
             ccs.delete(visa);
         }};
         acs.delete(acc);
-        assertTrue(true);
+        new Verifications(){{
+            acs.delete(acc); times = 1;
+            ccs.delete(visa); times = 1;
+        }};
     }
 
     @Test(expected = AccountActive.class)
@@ -98,7 +98,9 @@ public class TestAccountService_delete {
             acs.delete(acc);
         }};
         acs.delete(acc.getId());
-        assertTrue(true);
+        new Verifications(){{
+            acs.delete(acc.getId()); times = 1;
+        }};
     }
 
     @Test(expected = AccountNotFound.class)
