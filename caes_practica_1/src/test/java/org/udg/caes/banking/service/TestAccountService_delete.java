@@ -10,7 +10,6 @@ import org.udg.caes.banking.manager.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
 
 /**
  * Created by deidas on 13/11/16.
