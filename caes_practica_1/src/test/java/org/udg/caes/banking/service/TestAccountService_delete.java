@@ -33,14 +33,13 @@ public class TestAccountService_delete {
         }};
         acs.delete(acc);
         new Verifications(){{
-            acs.delete(acc); times = 1;
-            ccs.delete(visa); times = 1;
             em.delete(acc); times = 1;
+            ccs.delete(visa); times = 1;
         }};
     }
 
     @Test
-    public void DeleteWithoutCreditCardsOK(@Injectable final EntityManager em) throws Exception {
+    public void DeleteWithoutCreditCardsOK(@Injectable final EntityManager em, @Injectable final CreditCardService ccs) throws Exception {
         final List<CreditCard> cards = new ArrayList<CreditCard>();
         new Expectations(){{
             em.getCreditCards(acc); result = cards;
@@ -50,6 +49,7 @@ public class TestAccountService_delete {
         new Verifications(){{
             em.delete(acc); times = 1;
             acs.delete(acc); times = 1;
+            ccs.delete((CreditCard) any); times = 0;
         }};
     }
 
