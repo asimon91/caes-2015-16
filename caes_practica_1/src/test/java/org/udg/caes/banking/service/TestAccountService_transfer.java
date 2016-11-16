@@ -31,8 +31,6 @@ public class TestAccountService_transfer {
         assertEquals(from.getBalance(), 0);
         assertEquals(to.getBalance(), 5000);
         new Verifications(){{
-            //from.debit(5000); times = 1;
-            //to.credit(5000); times = 1;
             em.persist(from); times = 1;
             em.persist(to); times = 1;
         }};
