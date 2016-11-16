@@ -1,9 +1,6 @@
 package org.udg.caes.banking.service;
 
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Mocked;
-import mockit.Tested;
+import mockit.*;
 import org.junit.Test;
 import org.udg.caes.banking.entity.Account;
 import org.udg.caes.banking.exceptions.AccountNotFound;
@@ -26,6 +23,9 @@ public class TestAccountService_getAccount {
         }};
         Account res = acs.getAccount("foo");
         assertSame(res, ac);
+        new Verifications(){{
+            em.get("foo", Account.class); times = 1;
+        }};
     }
 
     @Test(expected = AccountNotFound.class)
