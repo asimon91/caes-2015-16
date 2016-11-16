@@ -29,21 +29,20 @@ public class TestClientService_delete {
         cs.delete("user1");
         new Verifications(){{
             acs.delete(acc); times = 1;
-            //cs.delete("user1"); times = 1;
         }};
     }
 
     @Test
-    public void DeleteWithoutAccountsOK(@Injectable final EntityManager em, @Mocked final Client cli) throws Exception {
+    public void DeleteWithoutAccountsOK(@Injectable final EntityManager em, @Injectable final AccountService acs, @Mocked final Client cli) throws Exception {
         final List<Account> clientAccounts = new ArrayList<Account>();
         new Expectations(){{
             em.get("user1", Client.class); result = cli;
             em.getClientAccounts(cli); result = clientAccounts;
         }};
         cs.delete("user1");
-//        new Verifications(){{
-//            cs.delete("user1"); times = 1;
-//        }};
+        new Verifications(){{
+            acs.delete((Account) any); times = 0;
+        }};
     }
 
     @Test(expected = ClientNotFound.class)
