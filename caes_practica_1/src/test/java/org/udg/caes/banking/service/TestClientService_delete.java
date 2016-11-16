@@ -18,7 +18,7 @@ public class TestClientService_delete {
     ClientService cs;
 
     @Test
-    public void DeleteOK(@Injectable final EntityManager em, @Injectable final AccountService acs, @Mocked final Client cli, @Mocked final Account acc) throws Exception{
+    public void DeleteOK(@Injectable final EntityManager em, @Injectable final AccountService acs, @Mocked final Client cli, @Mocked final Account acc) throws Exception {
         final List<Account> clientAccounts = new ArrayList<Account>();
         clientAccounts.add(acc);
         new Expectations(){{
@@ -33,8 +33,21 @@ public class TestClientService_delete {
         }};
     }
 
+    @Test
+    public void DeleteWithoutAccountsOK(@Injectable final EntityManager em, @Mocked final Client cli) throws Exception {
+        final List<Account> clientAccounts = new ArrayList<Account>();
+        new Expectations(){{
+            em.get("user1", Client.class); result = cli;
+            em.getClientAccounts(cli); result = clientAccounts;
+        }};
+        cs.delete("user1");
+//        new Verifications(){{
+//            cs.delete("user1"); times = 1;
+//        }};
+    }
+
     @Test(expected = ClientNotFound.class)
-    public void DeleteClientNotFoundError(@Injectable final EntityManager em) throws Exception{
+    public void DeleteClientNotFoundError(@Injectable final EntityManager em) throws Exception {
         new Expectations(){{
             em.get("user1", Client.class); result = new EntityNotFound();
         }};
@@ -42,7 +55,7 @@ public class TestClientService_delete {
     }
 
     @Test(expected = PersistenceException.class)
-    public void DeletePersistenceExceptionError(@Injectable final EntityManager em, @Injectable final AccountService acs, @Mocked final Client cli, @Mocked final Account acc) throws Exception{
+    public void DeletePersistenceExceptionError(@Injectable final EntityManager em, @Injectable final AccountService acs, @Mocked final Client cli, @Mocked final Account acc) throws Exception {
         final List<Account> clientAccounts = new ArrayList<Account>();
         clientAccounts.add(acc);
         new Expectations(){{
@@ -54,7 +67,7 @@ public class TestClientService_delete {
     }
 
     @Test(expected = AccountActive.class)
-    public void DeleteAccountActiveError(@Injectable final EntityManager em, @Injectable final AccountService acs, @Mocked final Client cli, @Mocked final Account acc) throws Exception{
+    public void DeleteAccountActiveError(@Injectable final EntityManager em, @Injectable final AccountService acs, @Mocked final Client cli, @Mocked final Account acc) throws Exception {
         final List<Account> clientAccounts = new ArrayList<Account>();
         clientAccounts.add(acc);
         new Expectations(){{
@@ -66,7 +79,7 @@ public class TestClientService_delete {
     }
 
     @Test(expected = NotEnoughBalance.class)
-    public void DeleteNotEnoughBalanceError(@Injectable final EntityManager em, @Injectable final AccountService acs, @Mocked final Client cli, @Mocked final Account acc) throws Exception{
+    public void DeleteNotEnoughBalanceError(@Injectable final EntityManager em, @Injectable final AccountService acs, @Mocked final Client cli, @Mocked final Account acc) throws Exception {
         final List<Account> clientAccounts = new ArrayList<Account>();
         clientAccounts.add(acc);
         new Expectations(){{

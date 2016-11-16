@@ -17,13 +17,12 @@ import static org.junit.Assert.*;
 public class TestAccountService_transfer {
     @Tested
     AccountService acs;
-    // I need to initialize Account objects, so
-    // I instantiate them
+
     Account from = new Account("from", 5000);
     Account to = new Account("to", 0);
 
     @Test
-    public void TransferOK(@Injectable final EntityManager em) throws Exception{
+    public void TransferOK(@Injectable final EntityManager em) throws Exception {
         new Expectations(){{
             em.get("from", Account.class); result = from;
             em.get("to", Account.class); result = to;
@@ -40,7 +39,7 @@ public class TestAccountService_transfer {
     }
 
     @Test(expected = NotEnoughBalance.class)
-    public void TransferNotEnoughAmount(@Injectable final EntityManager em) throws Exception{
+    public void TransferNotEnoughAmount(@Injectable final EntityManager em) throws Exception {
         new Expectations(){{
             em.get("from", Account.class); result = from;
             em.get("to", Account.class); result = to;
@@ -49,7 +48,7 @@ public class TestAccountService_transfer {
     }
 
     @Test(expected = PersistenceException.class)
-    public void TransferNotPersistent(@Injectable final EntityManager em) throws Exception{
+    public void TransferFromNotPersistent(@Injectable final EntityManager em) throws Exception {
         new Expectations(){{
             em.get("from", Account.class); result = from;
             em.get("to", Account.class); result = to;
@@ -62,11 +61,36 @@ public class TestAccountService_transfer {
         }};
     }
 
+    @Test(expected = PersistenceException.class)
+    public void TransferToNotPersistent(@Injectable final EntityManager em) throws Exception {
+        new Expectations(){{
+            em.get("from", Account.class); result = from;
+            em.get("to", Account.class); result = to;
+            em.persist(from);
+            em.persist(to); result = new PersistenceException();
+        }};
+        acs.transfer(from.getId(), to.getId(), 50);
+        new Verifications(){{
+            from.debit(50); times = 1;
+            to.credit(50); times = 1;
+            em.persist(from); times = 1;
+        }};
+    }
+
     @Test(expected = AccountNotFound.class)
-    public void TransferInexistentAccount(@Injectable final EntityManager em) throws Exception{
+    public void TransferFromInexistentAccount(@Injectable final EntityManager em) throws Exception {
         new Expectations(){{
             em.get("foo", Account.class); result = new EntityNotFound();
         }};
         acs.transfer("foo", to.getId(), 150);
+    }
+
+    @Test(expected = AccountNotFound.class)
+    public void TransferToInexistentAccount(@Injectable final EntityManager em, @Mocked final Account foo)throws Exception {
+        new Expectations(){{
+            em.get("foo", Account.class); result = foo;
+            em.get("bar", Account.class); result = new AccountNotFound();
+        }};
+        acs.transfer("foo", "bar", 123);
     }
 }
