@@ -25,7 +25,6 @@ public class TestClientService_getBalance {
     Account acc1 = new Account("small", 50);
     Account acc2 = new Account("big", 200);
     final List<Account> clientAccounts = new ArrayList<Account>();
-    final List<CreditCard> clientCreditCards = new ArrayList<CreditCard>();
 
     @Test
     public void GetBalanceOK(@Injectable final EntityManager em, @Mocked final Client cli) throws Exception{
