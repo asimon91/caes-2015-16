@@ -23,7 +23,6 @@ public class TestCreditCardService_credit {
         }};
         ccs.credit(visa, 500);
         new Verifications(){{
-            //ccs.credit(visa, 500); times = 1;
             em.persist(visa); times = 1;
         }};
     }
