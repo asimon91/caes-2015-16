@@ -30,11 +30,10 @@ public class TestCreditCardService_delete {
             em.getAccountAssociated(visa); //result = acc, not necessary
         }};
         new Expectations(CreditCardService.class){{
-            ccs.charge(visa, acc);
+            ccs.charge(visa, acc); times = 1;
         }};
         ccs.delete(visa);
-        new VerificationsInOrder(){{
-            ccs.charge(visa, acc); times = 1;
+        new Verifications(){{
             em.delete(visa); times = 1;
         }};
     }
