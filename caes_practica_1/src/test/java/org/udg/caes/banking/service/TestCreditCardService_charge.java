@@ -25,10 +25,10 @@ public class TestCreditCardService_charge {
         }};
         ccs.charge(visa, acc);
         assertEquals(acc.getBalance(), 600);
-        new Verifications(){{
-            em.persist(acc); times = 1;
-            em.persist(visa); times = 1;
+        new VerificationsInOrder(){{
             visa.reset(); times = 1;
+            em.persist(visa); times = 1;
+            em.persist(acc); times = 1;
         }};
     }
 
