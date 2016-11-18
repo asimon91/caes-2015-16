@@ -17,8 +17,12 @@ public class TestCreditCardService_credit {
     @Tested
     CreditCardService ccs;
 
+    @Injectable EntityManager em;
+
+    @Mocked CreditCard visa;
+
     @Test
-    public void CreditOK(@Injectable final EntityManager em, @Mocked final CreditCard visa) throws Exception {
+    public void CreditOK() throws Exception {
         new Expectations(){{
             visa.getCredit(); result = 1500;
             visa.getMaxCredit(); result = 2000;
@@ -31,7 +35,7 @@ public class TestCreditCardService_credit {
     }
 
     @Test(expected = CreditExceeded.class)
-    public void CreditExceededError(@Mocked final CreditCard visa) throws Exception {
+    public void CreditExceededError() throws Exception {
         new Expectations(){{
             visa.getCredit(); result = 1500;
             visa.getMaxCredit(); result = 3000;
@@ -40,7 +44,7 @@ public class TestCreditCardService_credit {
     }
 
     @Test(expected = PersistenceException.class)
-    public void CreditPersistenceExceptionError(@Injectable final EntityManager em, @Mocked final CreditCard visa) throws Exception {
+    public void CreditPersistenceExceptionError() throws Exception {
         new Expectations(){{
             visa.getCredit(); result = 100;
             visa.getMaxCredit(); result = 2000;
