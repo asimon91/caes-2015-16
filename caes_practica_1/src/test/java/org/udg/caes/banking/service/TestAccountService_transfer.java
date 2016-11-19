@@ -25,9 +25,9 @@ public class TestAccountService_transfer {
 
     @Test
     public void TransferOK() throws Exception {
-        new Expectations(){{
-            em.get("from", Account.class); result = from;
-            em.get("to", Account.class); result = to;
+        new Expectations(AccountService.class){{
+            acs.getAccount("from"); result = from;
+            acs.getAccount("to"); result = to;
         }};
         acs.transfer(from.getId(), to.getId(), 5000);
         assertEquals(from.getBalance(), 0);
@@ -40,9 +40,9 @@ public class TestAccountService_transfer {
 
     @Test(expected = NotEnoughBalance.class)
     public void TransferNotEnoughAmount() throws Exception {
-        new Expectations(){{
-            em.get("from", Account.class); result = from;
-            em.get("to", Account.class); result = to;
+        new Expectations(AccountService.class){{
+            acs.getAccount("from"); result = from;
+            acs.getAccount("to"); result = to;
         }};
         acs.transfer(from.getId(), to.getId(), 6000);
     }
@@ -50,46 +50,40 @@ public class TestAccountService_transfer {
     @Test(expected = PersistenceException.class)
     public void TransferFromNotPersistent() throws Exception {
         new Expectations(){{
-            em.get("from", Account.class); result = from;
-            em.get("to", Account.class); result = to;
             em.persist(from); result = new PersistenceException();
         }};
-        acs.transfer(from.getId(), to.getId(), 50);
-        new Verifications(){{
-            from.debit(50); times = 1;
-            to.credit(50); times = 1;
+        new Expectations(AccountService.class){{
+            acs.getAccount("from"); result = from;
+            acs.getAccount("to"); result = to;
         }};
+        acs.transfer(from.getId(), to.getId(), 50);
     }
 
     @Test(expected = PersistenceException.class)
     public void TransferToNotPersistent() throws Exception {
         new Expectations(){{
-            em.get("from", Account.class); result = from;
-            em.get("to", Account.class); result = to;
-            em.persist(from);
             em.persist(to); result = new PersistenceException();
         }};
-        acs.transfer(from.getId(), to.getId(), 50);
-        new Verifications(){{
-            from.debit(50); times = 1;
-            to.credit(50); times = 1;
-            em.persist(from); times = 1;
+        new Expectations(AccountService.class){{
+            acs.getAccount("from"); result = from;
+            acs.getAccount("to"); result = to;
         }};
+        acs.transfer(from.getId(), to.getId(), 50);
     }
 
     @Test(expected = AccountNotFound.class)
     public void TransferFromInexistentAccount() throws Exception {
-        new Expectations(){{
-            em.get("foo", Account.class); result = new EntityNotFound();
+        new Expectations(AccountService.class){{
+            acs.getAccount("foo"); result = new AccountNotFound();
         }};
         acs.transfer("foo", to.getId(), 150);
     }
 
     @Test(expected = AccountNotFound.class)
     public void TransferToInexistentAccount(@Mocked final Account foo)throws Exception {
-        new Expectations(){{
-            em.get("foo", Account.class); result = foo;
-            em.get("bar", Account.class); result = new AccountNotFound();
+        new Expectations(AccountService.class){{
+            acs.getAccount("foo"); result = foo;
+            acs.getAccount("bar"); result = new AccountNotFound();
         }};
         acs.transfer("foo", "bar", 123);
     }
