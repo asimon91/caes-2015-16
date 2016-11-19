@@ -16,8 +16,12 @@ public class TestAccountService_getAccount {
     @Tested
     AccountService acs;
 
+    @Injectable EntityManager em;
+
+    @Mocked Account ac;
+
     @Test
-    public void GetAccountOK(@Injectable final EntityManager em, @Mocked final Account ac) throws Exception{
+    public void GetAccountOK() throws Exception{
         new Expectations(){{
             em.get("foo", Account.class); result = ac;
         }};
@@ -29,7 +33,7 @@ public class TestAccountService_getAccount {
     }
 
     @Test(expected = AccountNotFound.class)
-    public void GetAccountFail(@Injectable final EntityManager em) throws Exception{
+    public void GetAccountFail() throws Exception{
         new Expectations(){{
             em.get("foo", Account.class); result = new EntityNotFound();
         }};

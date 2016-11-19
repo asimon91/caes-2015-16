@@ -19,8 +19,12 @@ public class TestClientService_getClient {
     @Tested
     ClientService cs;
 
+    @Injectable EntityManager em;
+
+    @Mocked Client cli;
+
     @Test
-    public void GetClientOK(@Injectable final EntityManager em, @Mocked final Client cli) throws Exception{
+    public void GetClientOK() throws Exception{
         new Expectations(){{
             em.get("foo", Client.class); result = cli;
         }};
@@ -29,7 +33,7 @@ public class TestClientService_getClient {
     }
 
     @Test(expected = ClientNotFound.class)
-    public void GetClientNotFoundError(@Injectable final EntityManager em) throws Exception{
+    public void GetClientNotFoundError() throws Exception{
         new Expectations(){{
             em.get("foo", Client.class); result = new EntityNotFound();
         }};

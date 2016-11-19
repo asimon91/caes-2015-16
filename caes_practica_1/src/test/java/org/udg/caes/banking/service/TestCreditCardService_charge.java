@@ -8,8 +8,6 @@ import org.udg.caes.banking.exceptions.NotEnoughBalance;
 import org.udg.caes.banking.exceptions.PersistenceException;
 import org.udg.caes.banking.manager.EntityManager;
 
-import static org.junit.Assert.assertEquals;
-
 /**
  * Created by deidas on 17/11/16.
  */
@@ -17,8 +15,14 @@ public class TestCreditCardService_charge {
     @Tested
     CreditCardService ccs;
 
+    @Injectable EntityManager em;
+
+    @Mocked CreditCard visa;
+
+    @Mocked Account acc;
+
     @Test
-    public void ChargeOK(@Injectable final EntityManager em, @Mocked final CreditCard visa, @Mocked final Account acc) throws Exception {
+    public void ChargeOK() throws Exception {
         new Expectations(){{
             visa.getCredit(); result = 400;
             acc.getBalance(); result = 1000;
@@ -33,7 +37,7 @@ public class TestCreditCardService_charge {
     }
 
     @Test(expected = NotEnoughBalance.class)
-    public void ChargeNotEnoughBalance(@Mocked final CreditCard visa, @Mocked final Account acc) throws Exception {
+    public void ChargeNotEnoughBalance() throws Exception {
         new Expectations(){{
             visa.getCredit(); result = 1500;
             acc.getBalance(); result = 1000;
@@ -42,7 +46,7 @@ public class TestCreditCardService_charge {
     }
 
     @Test(expected = PersistenceException.class)
-    public void ChargeCreditCardPersistenceExceptionError(@Injectable final EntityManager em, @Mocked final CreditCard visa, @Mocked final Account acc) throws Exception {
+    public void ChargeCreditCardPersistenceExceptionError() throws Exception {
         new Expectations(){{
             visa.getCredit(); result = 800;
             acc.getBalance(); result = 1000;
@@ -51,7 +55,7 @@ public class TestCreditCardService_charge {
         ccs.charge(visa, acc);
     }
     @Test(expected = PersistenceException.class)
-    public void ChargeAccountPersistenceExceptionError(@Injectable final EntityManager em, @Mocked final CreditCard visa, @Mocked final Account acc) throws Exception {
+    public void ChargeAccountPersistenceExceptionError() throws Exception {
         new Expectations(){{
             visa.getCredit(); result = 200;
             acc.getBalance(); result = 1000;

@@ -1,9 +1,7 @@
 package org.udg.caes.banking.service;
 
 import mockit.*;
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.omg.CORBA.PERSIST_STORE;
 import org.udg.caes.banking.entity.CreditCard;
 import org.udg.caes.banking.exceptions.PersistenceException;
 import org.udg.caes.banking.manager.EntityManager;

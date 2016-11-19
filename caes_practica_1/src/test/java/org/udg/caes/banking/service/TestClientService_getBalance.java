@@ -4,7 +4,6 @@ import mockit.*;
 import org.junit.Test;
 import org.udg.caes.banking.entity.Account;
 import org.udg.caes.banking.entity.Client;
-import org.udg.caes.banking.entity.CreditCard;
 import org.udg.caes.banking.manager.EntityManager;
 
 import java.util.ArrayList;
@@ -19,10 +18,18 @@ public class TestClientService_getBalance {
     @Tested
     ClientService cs;
 
+    @Injectable EntityManager em;
+
+    @Mocked Client cli;
+
+    @Mocked Account acc1;
+
+    @Mocked Account acc2;
+
     final List<Account> clientAccounts = new ArrayList<Account>();
 
     @Test
-    public void GetBalanceOK(@Injectable final EntityManager em, @Mocked final Client cli, @Mocked final Account acc1, @Mocked final Account acc2) throws Exception {
+    public void GetBalanceOK() throws Exception {
         clientAccounts.add(acc1);
         clientAccounts.add(acc2);
         new Expectations(){{
@@ -35,7 +42,7 @@ public class TestClientService_getBalance {
     }
 
     @Test
-    public void GetBalanceWithoutAccountsOK(@Injectable final EntityManager em, @Mocked final Client cli) throws Exception {
+    public void GetBalanceWithoutAccountsOK() throws Exception {
         new Expectations(){{
             em.getClientAccounts(cli); result = clientAccounts;
         }};

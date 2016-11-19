@@ -19,11 +19,20 @@ public class TestClientService_getRealBalance {
     @Tested
     ClientService cs;
 
-    Account acc1 = new Account("small", 50);
-    Account acc2 = new Account("big", 200);
+    @Injectable EntityManager em;
+
+    @Mocked Client cli;
+
+    @Mocked CreditCard visa;
+
+    @Mocked CreditCard masterCard;
+
+    @Mocked Account acc1;
+
+    @Mocked Account acc2;
 
     @Test
-    public void GetRealBalanceOK(@Injectable final EntityManager em, @Mocked final Client cli, @Mocked final CreditCard visa, @Mocked final CreditCard masterCard) throws Exception{
+    public void GetRealBalanceOK() throws Exception{
         /*
             I know this test could be shorter, but I wanted to test arrays
             with multiple accounts and credit cards. Shorter test would be the
@@ -43,13 +52,15 @@ public class TestClientService_getRealBalance {
             em.getCreditCards(acc2); result = client2CreditCards;
             visa.getCredit(); result = 50;
             masterCard.getCredit(); result = 50;
+            acc1.getBalance(); result = 50;
+            acc2.getBalance(); result = 200;
         }};
         long balance = cs.getRealBalance(cli);
         assertEquals(balance, 150);
     }
 
     @Test
-    public void GetRealBalanceWithoutAccountsOK(@Injectable final EntityManager em, @Mocked final Client cli) throws Exception{
+    public void GetRealBalanceWithoutAccountsOK() throws Exception{
         final List<Account> clientAccounts = new ArrayList<Account>();
         new Expectations(){{
             em.getClientAccounts(cli); result = clientAccounts;
@@ -62,7 +73,7 @@ public class TestClientService_getRealBalance {
     }
 
     @Test
-    public void GetRealBalanceWithoutCreditCardsOK(@Injectable final EntityManager em, @Mocked final Client cli) throws Exception {
+    public void GetRealBalanceWithoutCreditCardsOK() throws Exception {
         final List<Account> clientAccounts = new ArrayList<Account>();
         final List<CreditCard> emptyCreditCardList = new ArrayList<CreditCard>();
         clientAccounts.add(acc1);
@@ -71,6 +82,8 @@ public class TestClientService_getRealBalance {
             em.getClientAccounts(cli); result = clientAccounts;
             em.getCreditCards(acc1); result = emptyCreditCardList;
             em.getCreditCards(acc2); result = emptyCreditCardList;
+            acc1.getBalance(); result = 50;
+            acc2.getBalance(); result = 200;
         }};
         long balance = cs.getRealBalance(cli);
         assertEquals(balance, 250);

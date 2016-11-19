@@ -2,13 +2,10 @@ package org.udg.caes.banking.service;
 
 import mockit.*;
 import org.junit.Test;
-import org.udg.caes.banking.entity.Account;
 import org.udg.caes.banking.entity.CreditCard;
 import org.udg.caes.banking.exceptions.CreditExceeded;
 import org.udg.caes.banking.exceptions.PersistenceException;
 import org.udg.caes.banking.manager.EntityManager;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by deidas on 28/10/16.

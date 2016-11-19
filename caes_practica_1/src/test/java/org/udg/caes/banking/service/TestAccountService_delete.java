@@ -17,33 +17,36 @@ import java.util.List;
 public class TestAccountService_delete {
     @Tested
     AccountService acs;
-    Account acc = new Account("from", 0);
+
+    @Injectable EntityManager em;
+
+    @Injectable CreditCardService ccs;
+
+    @Injectable CreditCard visa;
+
+    @Mocked Account acc;
 
     // Tests Delete(Account) -------------------------------------------------------
 
     @Test
-    public void DeleteOK(@Injectable final EntityManager em, @Injectable final CreditCardService ccs, @Mocked final CreditCard visa) throws Exception{
+    public void DeleteOK() throws Exception{
         final List<CreditCard> cards = new ArrayList<CreditCard>();
         cards.add(visa);
         new Expectations(){{
             visa.getCredit(); result = 0;
             em.getCreditCards(acc); result  = cards;
-            ccs.delete(visa);
-            em.delete(acc);
+            ccs.delete(visa); times = 1;
+            em.delete(acc); times = 1;
+            acc.getBalance(); result = 0;
         }};
         acs.delete(acc);
-        new Verifications(){{
-            em.delete(acc); times = 1;
-            ccs.delete(visa); times = 1;
-        }};
     }
 
     @Test
-    public void DeleteWithoutCreditCardsOK(@Injectable final EntityManager em, @Injectable final CreditCardService ccs) throws Exception {
+    public void DeleteWithoutCreditCardsOK() throws Exception {
         final List<CreditCard> cards = new ArrayList<CreditCard>();
         new Expectations(){{
             em.getCreditCards(acc); result = cards;
-            em.delete(acc);
         }};
         acs.delete(acc);
         new Verifications(){{
@@ -54,39 +57,39 @@ public class TestAccountService_delete {
     }
 
     @Test(expected = AccountActive.class)
-    public void DeleteAccountIsActive(@Mocked final Account mockAcc) throws Exception {
+    public void DeleteAccountIsActive() throws Exception {
         new Expectations(){{
-            mockAcc.getBalance(); result = 1000;
+            acc.getBalance(); result = 1000;
         }};
-        acs.delete(mockAcc);
+        acs.delete(acc);
     }
 
     @Test(expected = AccountActive.class)
-    public void DeleteAccountCreditCardIsActive(@Injectable final EntityManager em, @Mocked final Account mockAcc, @Mocked final CreditCard MasterCard) throws Exception {
+    public void DeleteAccountCreditCardIsActive() throws Exception {
         final List<CreditCard> cards = new ArrayList<CreditCard>();
-        cards.add(MasterCard);
+        cards.add(visa);
         new Expectations(){{
-            mockAcc.getBalance(); result = 0;
-            MasterCard.getCredit(); result = 1000;
-            em.getCreditCards(mockAcc); result  = cards;
-        }};
-        acs.delete(mockAcc);
-    }
-
-    @Test(expected = PersistenceException.class)
-    public void DeleteCreditCardPersistenceError(@Injectable final EntityManager em, @Injectable final CreditCardService ccs, @Mocked final CreditCard MasterCard) throws Exception {
-        final List<CreditCard> cards = new ArrayList<CreditCard>();
-        cards.add(MasterCard);
-        new Expectations(){{
-            MasterCard.getCredit(); result = 0;
+            acc.getBalance(); result = 0;
+            visa.getCredit(); result = 1000;
             em.getCreditCards(acc); result  = cards;
-            ccs.delete(MasterCard); result = new PersistenceException();
         }};
         acs.delete(acc);
     }
 
     @Test(expected = PersistenceException.class)
-    public void DeleteAccountPersistenceError(@Injectable final EntityManager em, @Injectable final CreditCardService ccs, @Mocked final CreditCard visa) throws Exception {
+    public void DeleteCreditCardPersistenceError() throws Exception {
+        final List<CreditCard> cards = new ArrayList<CreditCard>();
+        cards.add(visa);
+        new Expectations(){{
+            visa.getCredit(); result = 0;
+            em.getCreditCards(acc); result  = cards;
+            ccs.delete(visa); result = new PersistenceException();
+        }};
+        acs.delete(acc);
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void DeleteAccountPersistenceError() throws Exception {
         final List<CreditCard> cards = new ArrayList<CreditCard>();
         cards.add(visa);
         new Expectations(){{
@@ -102,13 +105,13 @@ public class TestAccountService_delete {
     }
 
     @Test(expected = NotEnoughBalance.class)
-    public void DeleteNotEnoughBalanceError(@Injectable final EntityManager em, @Injectable final CreditCardService ccs, @Mocked final CreditCard MasterCard) throws Exception {
+    public void DeleteNotEnoughBalanceError() throws Exception {
         final List<CreditCard> cards = new ArrayList<CreditCard>();
-        cards.add(MasterCard);
+        cards.add(visa);
         new Expectations(){{
-            MasterCard.getCredit(); result = 0;
+            visa.getCredit(); result = 0;
             em.getCreditCards(acc); result  = cards;
-            ccs.delete(MasterCard); result = new NotEnoughBalance();
+            ccs.delete(visa); result = new NotEnoughBalance();
         }};
         acs.delete(acc);
     }
@@ -118,59 +121,61 @@ public class TestAccountService_delete {
     // Tests Delete(Class ID) -------------------------------------------------------
 
     @Test
-    public void DeleteIdOK(@Injectable final EntityManager em) throws Exception {
+    public void DeleteIdOK() throws Exception {
         new Expectations(){{
-            em.get("from", Account.class); result = acc;
+            acc.getId(); result = "acc";
         }};
         new Expectations(AccountService.class){{
-            acs.delete(acc);
+            acs.delete(acc); times = 1;
+            acs.getAccount("acc"); result = acc;
         }};
         acs.delete(acc.getId());
-        new Verifications(){{
-            acs.delete(acc.getId()); times = 1;
-        }};
     }
 
     @Test(expected = AccountNotFound.class)
-    public void DeleteIdAccountNotFoundError(@Injectable final EntityManager em) throws Exception {
+    public void DeleteIdAccountNotFoundError() throws Exception {
         new Expectations(){{
-            em.get("from", Account.class); result = acc;
+            acc.getId(); result = "acc";
         }};
         new Expectations(AccountService.class){{
             acs.delete(acc); result = new AccountNotFound();
+            acs.getAccount("acc"); result = acc;
         }};
         acs.delete(acc.getId());
     }
 
     @Test(expected = AccountActive.class)
-    public void DeleteIdAccountIsActiveError(@Injectable final EntityManager em) throws Exception {
+    public void DeleteIdAccountIsActiveError() throws Exception {
         new Expectations(){{
-            em.get("from", Account.class); result = acc;
+            acc.getId(); result = "acc";
         }};
         new Expectations(AccountService.class){{
             acs.delete(acc); result = new AccountActive();
+            acs.getAccount("acc"); result = acc;
         }};
         acs.delete(acc.getId());
     }
 
     @Test(expected = PersistenceException.class)
-    public void DeleteIdPersistenceError(@Injectable final EntityManager em) throws Exception {
+    public void DeleteIdPersistenceError() throws Exception {
         new Expectations(){{
-            em.get("from", Account.class); result = acc;
+            acc.getId(); result = "acc";
         }};
         new Expectations(AccountService.class){{
             acs.delete(acc); result = new PersistenceException();
+            acs.getAccount("acc"); result = acc;
         }};
         acs.delete(acc.getId());
     }
 
     @Test(expected = NotEnoughBalance.class)
-    public void DeleteIdNotEnoughBalanceError(@Injectable final EntityManager em) throws Exception {
+    public void DeleteIdNotEnoughBalanceError() throws Exception {
         new Expectations(){{
-            em.get("from", Account.class); result = acc;
+            acc.getId(); result = "acc";
         }};
         new Expectations(AccountService.class){{
             acs.delete(acc); result = new NotEnoughBalance();
+            acs.getAccount("acc"); result = acc;
         }};
         acs.delete(acc.getId());
     }
