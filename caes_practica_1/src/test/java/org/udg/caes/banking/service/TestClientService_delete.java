@@ -30,9 +30,10 @@ public class TestClientService_delete {
         final List<Account> clientAccounts = new ArrayList<Account>();
         clientAccounts.add(acc);
         new Expectations(){{
-            em.get("user1", Client.class); result = cli;
             em.getClientAccounts(cli); result = clientAccounts;
-            acs.delete(acc);
+        }};
+        new Expectations(ClientService.class){{
+            cs.getClient("user1"); result = cli;
         }};
         cs.delete("user1");
         new Verifications(){{
@@ -44,8 +45,10 @@ public class TestClientService_delete {
     public void DeleteWithoutAccountsOK() throws Exception {
         final List<Account> clientAccounts = new ArrayList<Account>();
         new Expectations(){{
-            em.get("user1", Client.class); result = cli;
             em.getClientAccounts(cli); result = clientAccounts;
+        }};
+        new Expectations(ClientService.class){{
+            cs.getClient("user1"); result = cli;
         }};
         cs.delete("user1");
         new Verifications(){{
@@ -55,8 +58,8 @@ public class TestClientService_delete {
 
     @Test(expected = ClientNotFound.class)
     public void DeleteClientNotFoundError() throws Exception {
-        new Expectations(){{
-            em.get("user1", Client.class); result = new EntityNotFound();
+        new Expectations(ClientService.class){{
+            cs.getClient("user1"); result = new ClientNotFound();
         }};
         cs.delete("user1");
     }
@@ -66,9 +69,11 @@ public class TestClientService_delete {
         final List<Account> clientAccounts = new ArrayList<Account>();
         clientAccounts.add(acc);
         new Expectations(){{
-            em.get("user1", Client.class); result = cli;
             em.getClientAccounts(cli); result = clientAccounts;
             acs.delete(acc); result = new PersistenceException();
+        }};
+        new Expectations(ClientService.class){{
+            cs.getClient("user1"); result = cli;
         }};
         cs.delete("user1");
     }
@@ -78,9 +83,11 @@ public class TestClientService_delete {
         final List<Account> clientAccounts = new ArrayList<Account>();
         clientAccounts.add(acc);
         new Expectations(){{
-            em.get("user1", Client.class); result = cli;
             em.getClientAccounts(cli); result = clientAccounts;
             acs.delete(acc); result = new AccountActive();
+        }};
+        new Expectations(ClientService.class){{
+            cs.getClient("user1"); result = cli;
         }};
         cs.delete("user1");
     }
@@ -90,9 +97,11 @@ public class TestClientService_delete {
         final List<Account> clientAccounts = new ArrayList<Account>();
         clientAccounts.add(acc);
         new Expectations(){{
-            em.get("user1", Client.class); result = cli;
             em.getClientAccounts(cli); result = clientAccounts;
             acs.delete(acc); result = new NotEnoughBalance();
+        }};
+        new Expectations(ClientService.class){{
+            cs.getClient("user1"); result = cli;
         }};
         cs.delete("user1");
     }
