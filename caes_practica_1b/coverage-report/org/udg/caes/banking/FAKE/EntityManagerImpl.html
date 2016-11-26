@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EntityManagerImpl.java</title>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+  <link rel='stylesheet' type='text/css' href='../../../../../coverage.css'/>
+  <link rel='shortcut icon' type='image/png' href='../../../../../logo.png'/>
+  <script type='text/javascript' src='../../../../../coverage.js'></script>
+  <script type='text/javascript' src='../../../../../prettify.js'></script>
+</head>
+<body onload='prettyPrint()'>
+  <table cellpadding='0' cellspacing='1'>
+    <caption>caes_practica_1/src/main/java/org/udg/caes/banking/FAKE/EntityManagerImpl.java</caption>
+    <tr>
+      <td class='line'>1</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>package org.udg.caes.banking.FAKE;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td><pre class='imports prettyprint' onclick='showHideLines(this)'><div>import org.udg.caes.banking.entity.Account;
+import org.udg.caes.banking.entity.Client;
+import org.udg.caes.banking.entity.CreditCard;
+import org.udg.caes.banking.exceptions.EntityNotFound;
+import org.udg.caes.banking.exceptions.PersistenceException;
+import org.udg.caes.banking.manager.EntityManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+</div><span>import ...</span></pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td class='comment' onclick='showHideLines(this)'><div>/**
+ * Created by imartin on 26/10/16.
+ */</div><span>/*...*/</span></td>
+    </tr>
+    <tr>
+      <td class='line'>18</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>public class EntityManagerImpl implements EntityManager {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>19</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  Map&lt;String, Client> <span class='instance uncovered' title='Reads: 0 Writes: 0'>clients</span> = new HashMap&lt;String, Client>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>20</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  Map&lt;String, Account> <span class='instance uncovered' title='Reads: 0 Writes: 0'>accounts</span> = new HashMap&lt;String, Account>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>21</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  Map&lt;String, CreditCard> <span class='instance uncovered' title='Reads: 0 Writes: 0'>creditCards</span> = new HashMap&lt;String, CreditCard>();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>23</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  Map&lt;String, List&lt;Account>> <span class='instance uncovered' title='Reads: 0 Writes: 0'>client2account</span> = new HashMap&lt;String, List&lt;Account>>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>24</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  Map&lt;String, List&lt;CreditCard>> <span class='instance uncovered' title='Reads: 0 Writes: 0'>account2cc</span> = new HashMap&lt;String, List&lt;CreditCard>>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>25</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  Map&lt;String, Account> <span class='instance uncovered' title='Reads: 0 Writes: 0'>cc2account</span> = new HashMap&lt;String, Account>();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>27</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public Object get(String id, Class&lt;?> clazz) throws EntityNotFound {</pre></td>
+    </tr>
+    <tr>
+      <td></td><td class='count'>0</td>
+      <td class='paths'>
+        <span style='cursor:default; background-color:#ff0000' onclick='hidePath()'>Path coverage: 0/16</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l30s0 l31s0 l32s0 l32s1')">A: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l30s0 l31s0 l31s1 l32s0 l32s1')">B: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l30s0 l30s1 l31s0 l32s0 l32s1')">C: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l30s0 l30s1 l31s0 l31s1 l32s0 l32s1')">D: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l29s1 l30s0 l31s0 l32s0 l32s1')">E: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l29s1 l30s0 l31s0 l31s1 l32s0 l32s1')">F: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l29s1 l30s0 l30s1 l31s0 l32s0 l32s1')">G: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l29s1 l30s0 l30s1 l31s0 l31s1 l32s0 l32s1')">H: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l30s0 l31s0 l32s0 l33s0')">I: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l30s0 l31s0 l31s1 l32s0 l33s0')">J: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l30s0 l30s1 l31s0 l32s0 l33s0')">K: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l30s0 l30s1 l31s0 l31s1 l32s0 l33s0')">L: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l29s1 l30s0 l31s0 l32s0 l33s0')">M: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l29s1 l30s0 l31s0 l31s1 l32s0 l33s0')">N: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l29s1 l30s0 l30s1 l31s0 l32s0 l33s0')">O: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l28s0 l29s0 l29s1 l30s0 l30s1 l31s0 l31s1 l32s0 l33s0')">P: 0</span>
+      </td>
+    </tr>
+    <tr>
+      <td class='line'>28</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    Object o = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>29</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    if (clazz == Client.class) o =  clients.get(id);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>30</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    if (clazz == Account.class) o =  accounts.get(id);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>31</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    if (clazz == CreditCard.class) o =  creditCards.get(id);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>32</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    if (o == null) throw new EntityNotFound();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>33</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    return o;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>34</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>36</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void persist(Object o) throws PersistenceException {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>38</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>40</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void delete(Object o) throws PersistenceException {</pre></td>
+    </tr>
+    <tr>
+      <td></td><td class='count'>0</td>
+      <td class='paths'>
+        <span style='cursor:default; background-color:#ff0000' onclick='hidePath()'>Path coverage: 0/4</span>
+        <span class='uncovered' onclick="showPath(this,'l41s0 l42s0 l43s0 l44s0')">A: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l41s0 l42s0 l43s0 l43s1 l45s0')">B: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l41s0 l42s0 l42s1 l45s0')">C: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l41s0 l41s1 l45s0')">D: 0</span>
+      </td>
+    </tr>
+    <tr>
+      <td class='line'>41</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    if (o instanceof Client) clients.remove(((Client)o).getId());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>42</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    else if (o instanceof Account) o =  accounts.remove(((Account)o).getId());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>43</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    else if (o instanceof CreditCard) o =  creditCards.remove(((CreditCard)o).getId());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>44</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    else throw new PersistenceException();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>45</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>47</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public List&lt;CreditCard> getCreditCards(Account acc) {</pre></td>
+    </tr>
+    <tr>
+      <td></td><td class='count'>0</td>
+      <td class='paths'>
+        <span style='cursor:default; background-color:#ff0000' onclick='hidePath()'>Path coverage: 0/2</span>
+        <span class='uncovered' onclick="showPath(this,'l48s0 l50s0')">A: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l48s0 l49s0 l50s0')">B: 0</span>
+      </td>
+    </tr>
+    <tr>
+      <td class='line'>48</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    if (!account2cc.containsKey(acc.getId()))</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>49</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>      account2cc.put(acc.getId(), new ArrayList&lt;CreditCard>());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>50</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    return account2cc.get(acc.getId());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>51</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>53</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public List&lt;Account> getClientAccounts(Client cl) {</pre></td>
+    </tr>
+    <tr>
+      <td></td><td class='count'>0</td>
+      <td class='paths'>
+        <span style='cursor:default; background-color:#ff0000' onclick='hidePath()'>Path coverage: 0/2</span>
+        <span class='uncovered' onclick="showPath(this,'l54s0 l56s0')">A: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l54s0 l55s0 l56s0')">B: 0</span>
+      </td>
+    </tr>
+    <tr>
+      <td class='line'>54</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    if (!client2account.containsKey(cl.getId()))</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>55</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>      client2account.put(cl.getId(), new ArrayList&lt;Account>());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>56</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    return client2account.get(cl.getId());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>57</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>59</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public Account getAccountAssociated(CreditCard cc) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>60</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    return cc2account.get(cc.getId());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>61</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>63</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void addAccount(Account acc, Client cl) {</pre></td>
+    </tr>
+    <tr>
+      <td></td><td class='count'>0</td>
+      <td class='paths'>
+        <span style='cursor:default; background-color:#ff0000' onclick='hidePath()'>Path coverage: 0/2</span>
+        <span class='uncovered' onclick="showPath(this,'l64s0 l65s0 l67s0 l68s0')">A: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l64s0 l65s0 l66s0 l67s0 l68s0')">B: 0</span>
+      </td>
+    </tr>
+    <tr>
+      <td class='line'>64</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    accounts.put(acc.getId(), acc);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>65</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    if (!client2account.containsKey(cl.getId()))</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>66</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>      client2account.put(cl.getId(), new ArrayList&lt;Account>());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>67</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    client2account.get(cl.getId()).add(acc);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>68</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>70</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void addClient(Client cl) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>71</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    clients.put(cl.getId(), cl);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>72</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>74</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void addCreditCard(CreditCard cc, Account acc) {</pre></td>
+    </tr>
+    <tr>
+      <td></td><td class='count'>0</td>
+      <td class='paths'>
+        <span style='cursor:default; background-color:#ff0000' onclick='hidePath()'>Path coverage: 0/2</span>
+        <span class='uncovered' onclick="showPath(this,'l75s0 l76s0 l78s0 l81s0')">A: 0</span>
+        <span class='uncovered' onclick="showPath(this,'l75s0 l76s0 l77s0 l78s0 l81s0')">B: 0</span>
+      </td>
+    </tr>
+    <tr>
+      <td class='line'>75</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    creditCards.put(cc.getId(), cc);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>76</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    if (!account2cc.containsKey(acc.getId()))</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>77</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>      account2cc.put(acc.getId(), new ArrayList&lt;CreditCard>());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>78</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    account2cc.get(acc.getId()).add(cc);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>79</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    cc2account.put(cc.getId(), acc);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>81</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>84</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>}</pre></td>
+    </tr>
+  </table>
+</body>
+</html>
