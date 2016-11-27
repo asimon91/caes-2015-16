@@ -24,6 +24,8 @@ public class TestAccountService_delete {
 
     @Injectable CreditCard visa;
 
+    @Injectable CreditCard masterCard;
+
     @Mocked Account acc;
 
     // Tests Delete(Account) -------------------------------------------------------
@@ -32,10 +34,13 @@ public class TestAccountService_delete {
     public void DeleteOK() throws Exception{
         final List<CreditCard> cards = new ArrayList<CreditCard>();
         cards.add(visa);
+        cards.add(masterCard);
         new Expectations(){{
             visa.getCredit(); result = 0;
+            masterCard.getCredit(); result = 0;
             em.getCreditCards(acc); result  = cards;
             ccs.delete(visa); times = 1;
+            ccs.delete(masterCard); times = 1;
             em.delete(acc); times = 1;
             acc.getBalance(); result = 0;
         }};
@@ -80,8 +85,10 @@ public class TestAccountService_delete {
     public void DeleteCreditCardPersistenceError() throws Exception {
         final List<CreditCard> cards = new ArrayList<CreditCard>();
         cards.add(visa);
+        cards.add(masterCard);
         new Expectations(){{
             visa.getCredit(); result = 0;
+            masterCard.getCredit(); result = 0;
             em.getCreditCards(acc); result  = cards;
             ccs.delete(visa); result = new PersistenceException();
         }};
@@ -92,8 +99,10 @@ public class TestAccountService_delete {
     public void DeleteAccountPersistenceError() throws Exception {
         final List<CreditCard> cards = new ArrayList<CreditCard>();
         cards.add(visa);
+        cards.add(masterCard);
         new Expectations(){{
             visa.getCredit(); result = 0;
+            masterCard.getCredit(); result = 0;
             em.getCreditCards(acc); result = cards;
             ccs.delete(visa);
             em.delete(acc); result = new PersistenceException();
@@ -108,6 +117,7 @@ public class TestAccountService_delete {
     public void DeleteNotEnoughBalanceError() throws Exception {
         final List<CreditCard> cards = new ArrayList<CreditCard>();
         cards.add(visa);
+        cards.add(masterCard);
         new Expectations(){{
             visa.getCredit(); result = 0;
             em.getCreditCards(acc); result  = cards;
