@@ -25,10 +25,13 @@ public class TestClientService_delete {
 
     @Mocked Account acc;
 
+    @Mocked Account acc2;
+
     @Test
     public void DeleteOK() throws Exception {
         final List<Account> clientAccounts = new ArrayList<Account>();
         clientAccounts.add(acc);
+        clientAccounts.add(acc2);
         new Expectations(){{
             em.getClientAccounts(cli); result = clientAccounts;
         }};
@@ -38,6 +41,7 @@ public class TestClientService_delete {
         cs.delete("user1");
         new Verifications(){{
             acs.delete(acc); times = 1;
+            acs.delete(acc2); times = 1;
         }};
     }
 
