@@ -56,7 +56,6 @@ public class TestAccountService_delete {
         acs.delete(acc);
         new Verifications(){{
             em.delete(acc); times = 1;
-            acs.delete(acc); times = 1;
             ccs.delete((CreditCard) any); times = 0;
         }};
     }
@@ -90,7 +89,7 @@ public class TestAccountService_delete {
             visa.getCredit(); result = 0;
             masterCard.getCredit(); result = 0;
             em.getCreditCards(acc); result  = cards;
-            ccs.delete(visa); result = new PersistenceException();
+            ccs.delete(masterCard); result = new PersistenceException();
         }};
         acs.delete(acc);
     }
@@ -103,9 +102,8 @@ public class TestAccountService_delete {
         new Expectations(){{
             visa.getCredit(); result = 0;
             masterCard.getCredit(); result = 0;
-            em.getCreditCards(acc); result = cards;
-            ccs.delete(visa);
             em.delete(acc); result = new PersistenceException();
+            em.getCreditCards(acc); result = cards;
         }};
         acs.delete(acc);
         new Verifications(){{
