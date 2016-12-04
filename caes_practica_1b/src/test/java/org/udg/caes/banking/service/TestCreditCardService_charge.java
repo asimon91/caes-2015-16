@@ -45,6 +45,16 @@ public class TestCreditCardService_charge {
         ccs.charge(visa, acc);
     }
 
+    @Test(expected = NotEnoughBalance.class)
+    public void ChargeDebitNoutEnoughBalance() throws Exception {
+        new Expectations(){{
+            acc.getBalance(); result = 1500;
+            visa.getCredit(); result = 1000;
+            acc.debit(anyLong); result = new NotEnoughBalance();
+        }};
+        ccs.charge(visa, acc);
+    }
+
     @Test(expected = PersistenceException.class)
     public void ChargeCreditCardPersistenceExceptionError() throws Exception {
         new Expectations(){{
