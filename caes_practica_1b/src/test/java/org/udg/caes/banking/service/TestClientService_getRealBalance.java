@@ -32,12 +32,7 @@ public class TestClientService_getRealBalance {
     @Mocked Account acc2;
 
     @Test
-    public void GetRealBalanceOK() throws Exception{
-        /*
-            I know this test could be shorter, but I wanted to test arrays
-            with multiple accounts and credit cards. Shorter test would be the
-            same but with only one account and credit card.
-         */
+    public void GetRealBalance2AccountsOK() throws Exception{
         final List<Account> clientAccounts = new ArrayList<Account>();
         final List<CreditCard> client1CreditCards = new ArrayList<CreditCard>();
         final List<CreditCard> client2CreditCards = new ArrayList<CreditCard>();
@@ -57,6 +52,25 @@ public class TestClientService_getRealBalance {
         }};
         long balance = cs.getRealBalance(cli);
         assertEquals(balance, 150);
+    }
+
+    @Test
+    public void GetRealBalance1Account2CardsOK() throws Exception{
+        final List<Account> clientAccounts = new ArrayList<Account>();
+        final List<CreditCard> clientCreditCards = new ArrayList<CreditCard>();
+        clientCreditCards.add(masterCard);
+        clientCreditCards.add(visa);
+
+        clientAccounts.add(acc1);
+        new Expectations(){{
+            em.getClientAccounts(cli); result = clientAccounts;
+            em.getCreditCards(acc1); result = clientCreditCards;
+            visa.getCredit(); result = 50;
+            masterCard.getCredit(); result = 50;
+            acc1.getBalance(); result = 200;
+        }};
+        long balance = cs.getRealBalance(cli);
+        assertEquals(balance, 100);
     }
 
     @Test
